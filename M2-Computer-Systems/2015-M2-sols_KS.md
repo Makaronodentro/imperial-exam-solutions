@@ -108,6 +108,27 @@ A JMP instruction permanently changes the program counter. A CALL instruction le
 
 Jump acts like a GOTO whereas CALL acts more like a function call. 
 
+For a JUMP:
+        mov eip, SomeAddress
+
+For a CALL:
+
+on Entry:
+        // Place the instruction location on the stack
+        push eip
+        
+        // Store the CALLERs frame pointer and allocate space for the callee
+        push ebp   || save the caller's stack base pointer register
+        mov ebp, esp || set the functions base pointer equal to the caller's top
+        sub esp, nbytes || allocate nbytes space for the callee's local variables
+        
+on Exit:
+        // Reset the stack frame to the caller's
+        mov esp,ebp
+        pop ebp
+        // Get the callers eip location
+        pop eip
+
 
 ###2 b.
 The following program will take an array A[] and reverse it. E.g. A = [1, 2, 3] will be come A = [3, 2, 1]. I'm going to use the following registers as such:
